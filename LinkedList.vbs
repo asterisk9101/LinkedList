@@ -267,17 +267,19 @@ class LinkedList
         end if
         
         ' list の先頭と末尾以外に要素を追加する場合
-        dim target
-        set target = getItem(index)
+        dim nx, pr
+        set nx = getItem(index)
+        set pr = nx.getPrev()
         
-        call target.setPrev(item)
-        call item.setNext(target)
-        call item.setPrev(target.getPrev())
+        call nx.setPrev(item)
+        call pr.setNext(item)
+        call item.setNext(nx)
+        call item.setPrev(pr)
         
         if index <= p.getValue() then
             ' ポインタの位置より前に要素が追加された場合
             call p.setValue(p.getValue() + 1)
-        elseif p.getValue() + 1 then
+        elseif index = p.getValue() + 1 then
             ' ポインタの次の位置に要素が追加された場合
             call p.setNext(item)
         end if
@@ -412,6 +414,8 @@ class LinkedList
         ' ポインタ位置を考慮して、目的の位置へ最短の位置から検索を開始する。
         dim escape, pivot, item
         set escape = p.clone()
+        
+        
         pivot = p.getValue()
         if pivot + 1 = index then
             set item = p.getNext()
@@ -436,7 +440,9 @@ class LinkedList
                 set item = forward(p, index - pivot)
             end if
         end if
+        
         set p = escape
+        
         set getItem = item
     end function
     
@@ -536,6 +542,13 @@ class LinkedList
         else
             p.item(i)
         end if
+    end function
+    
+    public function rewind()
+        ''' ポインタ (最後にアクセスした要素への参照) 位置を最初に戻す。
+        ''' 戻り値として、最初の要素を返す。
+        setIndex(-1)
+        call bind(rewind, me.nextItem())
     end function
     
     public function indexOf(byval key, byval start)
@@ -642,17 +655,16 @@ class LinkedList
             exit function
         end if
         
-        dim ary(), length, index, i
-        index = me.index()
-        length = me.length()
-        redim ary(length - 1)
+        redim ary(count - 1)
         
+        dim item, i
+        set item = head
         i = 0
-        do while i < length
-            call bind(ary(i), me.item(i))
+        do while not item is nothing
+            call bind(ary(i), item.getValue())
+            set item = item.getNext()
             i = i + 1
         loop
-        call me.setIndex(index)
         
         toArray = ary
     end function
@@ -662,8 +674,7 @@ class LinkedList
         ''' 第一引数 sep として、要素を分割する文字列 (String) を受け取る。
         ''' 戻り値として、LinkedList の全ての要素を表す文字列 (String) を返す。
         dim ary
-        ary = me.toArray()
-        
+        ary = toArray()
         dim i, length
         i = 0
         length = ubound(ary)

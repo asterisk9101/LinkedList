@@ -409,24 +409,30 @@ class LinkedList
         dim escape, pivot, item
         set escape = p.clone()
         
-        pivot = p.getValue()
-        if pivot + 1 = index then
+        pivot = p.getValue() ' ポインタの位置を基準とする
+        
+        if index = pivot + 1 then
+            ' index がポインタの次の要素だった場合
             set item = p.getNext()
-        elseif pivot = index then
+        elseif index = pivot then
+            ' index がポインタ位置の要素だった場合
             set item = p.getPrev()
         elseif pivot = -1 then
+            ' ポインタが初期位置にある場合（走査は head または tail から開始される）
             if count \ 2 >= index then
                 set item = forward(head, index)
             else
                 set item = backward(tail, count - index - 1)
             end if
         elseif pivot > index then
+            ' index が head と pivot の間にある場合
             if pivot \ 2 < index then
                 set item = backward(p, pivot - index - 1)
             else
                 set item = forward(head, index)
             end if
         else
+            ' index が pivot と tail の間にある場合
             if (count - pivot) \ 2 < index then
                 set item = backward(tail, count - index - 1)
             else

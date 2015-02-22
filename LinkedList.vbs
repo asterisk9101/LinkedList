@@ -143,24 +143,6 @@ class LinkedList
         call insert(0, val)
     end function
     
-    public function pop()
-        ''' LinkedList の末尾の要素を取り出す（削除する）。ポインタ位置が移動する場合がある。
-        ''' 戻り値として、LinkedList の末尾の要素 (Variant) を返す。
-        dim item
-        set item = new ListItem
-        call item.setValue(remove(count - 1))
-        call bind(pop, item.getValue())
-    end function
-    
-    public function shift()
-        ''' LinkedList の先頭の要素を取り出す（削除する）。ポインタ位置が移動する場合がある。
-        ''' 戻り値として、LinkedList の先頭の要素 (Variant) を返す。
-        dim item
-        set item = new ListItem
-        call item.setValue(remove(0))
-        call bind(shift, item.getValue())
-    end function
-    
     public function insert(byval index, byval val)
         ''' 指定した位置に要素を追加する。
         ''' ポインタ位置に要素が追加された場合、ポインタ位置は後ろへ移動する。
@@ -283,6 +265,18 @@ class LinkedList
             ' ポインタの次の位置に要素が追加された場合
             call p.setNext(item)
         end if
+    end function
+    
+    public function pop()
+        ''' LinkedList の末尾の要素を取り出す（削除する）。ポインタ位置が移動する場合がある。
+        ''' 戻り値として、LinkedList の末尾の要素 (Variant) を返す。
+        call bind(pop, remove(count - 1))
+    end function
+    
+    public function shift()
+        ''' LinkedList の先頭の要素を取り出す（削除する）。ポインタ位置が移動する場合がある。
+        ''' 戻り値として、LinkedList の先頭の要素 (Variant) を返す。
+        call bind(shift, remove(0))
     end function
     
     public function remove(byval index)
@@ -414,7 +408,6 @@ class LinkedList
         ' ポインタ位置を考慮して、目的の位置へ最短の位置から検索を開始する。
         dim escape, pivot, item
         set escape = p.clone()
-        
         
         pivot = p.getValue()
         if pivot + 1 = index then
@@ -710,4 +703,3 @@ class LinkedList
         end if
     end function
 end class
-

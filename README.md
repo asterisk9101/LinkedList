@@ -22,21 +22,21 @@
 dim list
 set list = new LinkedList
 
-call list.push(1) ' 末尾への追加
-call list.unshift(true) ' 先頭への追加
-call list.insert(1, "a") ' 指定位置への追加
+call list.push(1) ' 末尾への追加 [1]
+call list.unshift(true) ' 先頭への追加 [True, 1]
+call list.insert(1, "a") ' 指定位置への追加 [True, "a", 1]
 
-msgbox(list.toString(", ")) ' =>　"True, a, 1"
+msgbox(list.toString(", ")) ' => "True, a, 1"
 
-msgbox list.pop() ' => 1 末尾からの取り出し
+msgbox list.remove(1) ' => "a" 指定位置からの取り出し
 msgbox list.shift() ' => True 先頭からの取り出し
-msgbox list.remove(0) ' => "a" 指定位置からの取り出し
+msgbox list.pop() ' => 1 末尾からの取り出し
 
 ' ---
 
 call list.push(1)
 call list.push(2)
-call list.push(3)
+call list.push(3) ' [1, 2, 3]
 
 ' ---
 
@@ -49,7 +49,7 @@ msgbox list.item(1) ' => 2 ポインタの位置が 1 へ移動する
 call list.setElement(1, 10) ' ポインタからアクセスするので高速に動作する
 msgbox list.item(1) ' => 10
 
-
+msgbox list.toString(", ") ' => "1, 10, 3"
 
 
 
@@ -58,14 +58,13 @@ msgbox list.item(1) ' => 10
 dim list2
 set list2 = new LinkedList
 
-dim item
-item = list.rewind() ' ポインタの位置を最初に戻す。
-do until isEmpty(item)
-    call list2.unshift(item)
-    item = list.nextItem()
+call list.rewind() ' 最初の要素を取得してポインタを初期位置に戻す。上記で要素の参照と書き換えを行っているため。
+do while list.hasNextItem()
+    call list2.unshift(list.nextItem())
 loop
 
 msgbox list2.toString(", ") ' => "3, 10, 1"
+
 
 ' toArray, clone, length, indexOf, currentItem, concat etc.
 

@@ -480,15 +480,23 @@ class LinkedList
         ''' ポインタが末尾の要素にある場合は未定義 (Empty) を返す。
         ''' 戻り値として、ポインタ位置の次の要素 (Variant or Empty) を返す。
         dim ret
-        
         if p.getNext() is nothing then
             ret = Empty
         else
             call bind(ret, p.getNext().getValue())
             call p.init(p.getValue() + 1, p.getNext().getNext(), p.getNext())
         end if
-        
         call bind(nextItem, ret)
+    end function
+    
+    public function hasNextItem()
+        ''' 次の要素がある場合は True を返す。
+        ''' 戻り値として、次の要素の有無 (True or False) を返す。
+        if p.getNext() is nothing then
+            hasNextItem = false
+        else
+            hasNextItem = true
+        end if
     end function
     
     public function currentItem()
@@ -526,29 +534,10 @@ class LinkedList
         set concat = me
     end function
     
-    public function setIndex(byval index)
-        ''' LinkedList のポインタ (最後にアクセスした要素への参照) 位置を設定する。
-        ''' ポインタ位置は item メソッドを使用しても変更することができるが、初期位置 (-1) へ戻すにはこのメソッドを使用する必要がある。
-        ''' ポインタをセットする位置として不正な値を受け取った場合、エラーを発生させる。
-        ''' 第一引数 index として、ポインタをセットする位置 (Number) を受け取る。
-        ''' 戻り値は返さない。
-        if index > count then Err.raise(13)
-        if index < -1 then Err.raise(13)
-        
-        if index = -1 then
-            call p.setValue(index)
-            call p.setNext(head)
-            call p.setPrev(nothing)
-        else
-            p.item(i)
-        end if
-    end function
-    
     public function rewind()
-        ''' ポインタ (最後にアクセスした要素への参照) 位置を最初に戻す。
-        ''' 戻り値として、最初の要素を返す。
-        setIndex(-1)
-        call bind(rewind, me.nextItem())
+        ''' ポインタ (最後にアクセスした要素への参照) 位置を初期位置に戻す。
+        ''' 戻り値を返さない。
+        call p.init(-1, head, nothing)
     end function
     
     public function indexOf(byval key, byval start)
@@ -721,3 +710,4 @@ class LinkedList
         end if
     end function
 end class
+

@@ -559,7 +559,7 @@ class LinkedList
         result = -1
         if isObject(key) then
             do while i < length
-                if key is me.item(i) then
+                if key.equals(me.item(i)) then
                     result = i
                     exit do
                 end if

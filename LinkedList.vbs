@@ -250,7 +250,7 @@ class LinkedList
         
         ' list の先頭と末尾以外に要素を追加する場合
         dim nx, pr
-        set nx = getItem(index)
+        set nx = getItemPointer(index)
         set pr = nx.getPrev()
         
         call nx.setPrev(item)
@@ -355,7 +355,7 @@ class LinkedList
         end if
         
         dim target
-        set target = getItem(index)
+        set target = getItemPointer(index)
         
         call target.getNext().setPrev(target.getPrev())
         call target.getPrev().setNext(target.getNext())
@@ -372,32 +372,32 @@ class LinkedList
     end function
     
     public function item(byval index)
-        ''' getElement メソッドのショートカット。
-        call bind(item, getElement(index))
+        ''' getItem メソッドのショートカット。
+        call bind(item, getItem(index))
     end function
     
-    public function getElement(byval index)
+    public function getItem(byval index)
         ''' LinkedList の前から index 番目の要素を返す。ポインタ (最後にアクセスした要素) の位置が index に移動する。
         ''' 第一引数 index として、要素の位置 (Number) を受け取る。
         ''' 戻り値として、LinkedList の前から index 番目の要素 (Variant) を返す。
         dim item
-        set item = getItem(index)
-        call bind(getElement, getItem(index).getValue())
+        set item = getItemPointer(index)
+        call bind(getItem, getItem(index).getValue())
         call p.init(index, item.getNext(), item)
     end function
     
-    public function setElement(byval index, byval val)
+    public function setItem(byval index, byval val)
         ''' LinkedList の前から index 番目の要素を書き換える。ポインタ (最後にアクセスした要素) の位置が index に移動する。
         ''' 第一引数 index として、要素の位置 (Number) を受け取る。
         ''' 第二引数 val として、書き換える値 (Variant) を受け取る。
         ''' 戻り値を返さない。
         dim item
-        set item = getItem(index)
+        set item = getItemPointer(index)
         call item.setValue(val)
         call p.init(index, item.getNext(), item)
     end function
     
-    private function getItem(byval index)
+    private function getItemPointer(byval index)
         ''' LinkedList の前から index 番目の要素を返す。ポインタは移動しない。
         ''' index として不正な位置を受け取った場合、エラーを発生させる。
         ''' 第一引数 index として、要素の位置 (Number) を受け取る。
@@ -442,7 +442,7 @@ class LinkedList
         
         set p = escape
         
-        set getItem = item
+        set getItemPointer = item
     end function
     
     private function forward(byval from, byval distance)
